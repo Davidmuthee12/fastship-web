@@ -1,6 +1,5 @@
 /* eslint-disable */
 /* tslint:disable */
-// @ts-nocheck
 /*
  * ---------------------------------------------------------------
  * ## THIS FILE WAS GENERATED VIA SWAGGER-TYPESCRIPT-API        ##
@@ -10,39 +9,13 @@
  * ---------------------------------------------------------------
  */
 
-/** TagName */
-export enum TagName {
-  Express = "express",
-  Standard = "standard",
-  Fragile = "fragile",
-  Heavy = "heavy",
-  International = "international",
-  Domestic = "domestic",
-  TemperatureControlled = "temperature_controlled",
-  Gift = "gift",
-  Return = "return",
-  Documents = "documents",
-}
-
-/** ShipmentStatus */
-export enum ShipmentStatus {
-  Placed = "placed",
-  InTransit = "in_transit",
-  OutForDelivery = "out_for_delivery",
-  Delivered = "delivered",
-  Cancelled = "cancelled",
-}
-
 /** Body_login_delivery_partner */
 export interface BodyLoginDeliveryPartner {
   /** Grant Type */
   grant_type?: string | null;
   /** Username */
   username: string;
-  /**
-   * Password
-   * @format password
-   */
+  /** Password */
   password: string;
   /**
    * Scope
@@ -51,10 +24,7 @@ export interface BodyLoginDeliveryPartner {
   scope?: string;
   /** Client Id */
   client_id?: string | null;
-  /**
-   * Client Secret
-   * @format password
-   */
+  /** Client Secret */
   client_secret?: string | null;
 }
 
@@ -64,10 +34,7 @@ export interface BodyLoginSeller {
   grant_type?: string | null;
   /** Username */
   username: string;
-  /**
-   * Password
-   * @format password
-   */
+  /** Password */
   password: string;
   /**
    * Scope
@@ -76,10 +43,7 @@ export interface BodyLoginSeller {
   scope?: string;
   /** Client Id */
   client_id?: string | null;
-  /**
-   * Client Secret
-   * @format password
-   */
+  /** Client Secret */
   client_secret?: string | null;
 }
 
@@ -87,18 +51,6 @@ export interface BodyLoginSeller {
 export interface BodyResetPassword {
   /** Password */
   password: string;
-}
-
-/** Body_submit_review */
-export interface BodySubmitReview {
-  /**
-   * Rating
-   * @min 1
-   * @max 5
-   */
-  rating: number;
-  /** Comment */
-  comment: string | null;
 }
 
 /** DeliveryPartnerCreate */
@@ -110,8 +62,6 @@ export interface DeliveryPartnerCreate {
    * @format email
    */
   email: string;
-  /** Serviceable Zip Codes */
-  serviceable_zip_codes: number[];
   /** Max Handling Capacity */
   max_handling_capacity: number;
   /** Password */
@@ -127,16 +77,12 @@ export interface DeliveryPartnerRead {
    * @format email
    */
   email: string;
-  /** Serviceable Zip Codes */
-  serviceable_zip_codes: number[];
   /** Max Handling Capacity */
   max_handling_capacity: number;
 }
 
 /** DeliveryPartnerUpdate */
 export interface DeliveryPartnerUpdate {
-  /** Serviceable Zip Codes */
-  serviceable_zip_codes?: number[] | null;
   /** Max Handling Capacity */
   max_handling_capacity?: number | null;
 }
@@ -158,6 +104,10 @@ export interface SellerCreate {
   email: string;
   /** Password */
   password: string;
+  /** Address */
+  address: string;
+  /** Zip Code */
+  zip_code: number;
 }
 
 /** SellerRead */
@@ -176,7 +126,10 @@ export interface SellerRead {
  * Shipment details to create a new shipment
  */
 export interface ShipmentCreate {
-  /** Content */
+  /**
+   * Content
+   * @maxLength 100
+   */
   content: string;
   /**
    * Weight
@@ -185,12 +138,9 @@ export interface ShipmentCreate {
   weight: number;
   /**
    * Destination
-   * Instead use location, Location Zipcode
-   * @deprecated
+   * location zipcode
    */
   destination: number;
-  /** Location */
-  location?: number | null;
   /**
    * Client Contact Email
    * @format email
@@ -224,9 +174,12 @@ export interface ShipmentEvent {
   shipment_id: string;
 }
 
-/** ShipmentRead */
-export interface ShipmentRead {
-  /** Content */
+/** Shipment */
+export interface Shipment {
+  /**
+   * Content
+   * @maxLength 100
+   */
   content: string;
   /**
    * Weight
@@ -235,12 +188,9 @@ export interface ShipmentRead {
   weight: number;
   /**
    * Destination
-   * Instead use location, Location Zipcode
-   * @deprecated
+   * location zipcode
    */
   destination: number;
-  /** Location */
-  location?: number | null;
   /**
    * Id
    * @format uuid
@@ -257,6 +207,15 @@ export interface ShipmentRead {
   tags: TagRead[];
 }
 
+/** ShipmentStatus */
+export enum ShipmentStatus {
+  Placed = "placed",
+  InTransit = "in_transit",
+  OutForDelivery = "out_for_delivery",
+  Delivered = "delivered",
+  Cancelled = "cancelled",
+}
+
 /** ShipmentUpdate */
 export interface ShipmentUpdate {
   /** Location */
@@ -270,11 +229,33 @@ export interface ShipmentUpdate {
   estimated_delivery?: string | null;
 }
 
+/** TagName */
+export enum TagName {
+  Express = "express",
+  Standard = "standard",
+  Fragile = "fragile",
+  Heavy = "heavy",
+  International = "international",
+  Domestic = "domestic",
+  TemperatureControlled = "temperature_controlled",
+  Gift = "gift",
+  Return = "return",
+  Documents = "documents",
+}
+
 /** TagRead */
 export interface TagRead {
   name: TagName;
-  /** Instructions */
-  instructions: string;
+  /** Instruction */
+  instruction: string;
+}
+
+/** TokenData */
+export interface TokenData {
+  /** Access Token */
+  access_token: string;
+  /** Token Type */
+  token_type: string;
 }
 
 /** ValidationError */
@@ -285,10 +266,6 @@ export interface ValidationError {
   msg: string;
   /** Error Type */
   type: string;
-  /** Input */
-  input?: any;
-  /** Context */
-  ctx?: object;
 }
 
 import type {
@@ -338,7 +315,6 @@ export interface ApiConfig<SecurityDataType = unknown> extends Omit<
 
 export enum ContentType {
   Json = "application/json",
-  JsonApi = "application/vnd.api+json",
   FormData = "multipart/form-data",
   UrlEncoded = "application/x-www-form-urlencoded",
   Text = "text/plain",
@@ -473,39 +449,22 @@ export class HttpClient<SecurityDataType = unknown> {
 /**
  * @title FastShip
  * @version 0.1.0
- * @termsOfService https://fastapi.tiangolo.com/terms/
- * @contact FastShip Support <support@fastship.com> (https://fastship.com/support)
  *
  *
- * Delivery Management System for sellers and agents
+ * Delivery Management System for sellers and delivery agents
  *
  * ### Seller
- * - Submit shiment effortlessly
+ * - Submit shipment effortlessly
  * - Share tracking links with customers
  *
  * ### Delivery Agent
  * - Auto accept shipments
- * - Track and update status
- * - Email and SMS notification
+ * - Track and update shipment status
+ * - Email and SMS notifications
  */
 export class Api<
   SecurityDataType extends unknown,
 > extends HttpClient<SecurityDataType> {
-  /**
-   * No description
-   *
-   * @name ReadRoot
-   * @summary Read Root
-   * @request GET:/
-   */
-  readRoot = (params: RequestParams = {}) =>
-    this.request<any, any>({
-      path: `/`,
-      method: "GET",
-      format: "json",
-      ...params,
-    });
-
   shipment = {
     /**
      * No description
@@ -525,7 +484,7 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<ShipmentRead, HTTPValidationError>({
+      this.request<Shipment, HTTPValidationError>({
         path: `/shipment/`,
         method: "GET",
         query: query,
@@ -534,16 +493,16 @@ export class Api<
       }),
 
     /**
-     * @description Submit a new shipment
+     * No description
      *
      * @tags Shipment
-     * @name CreateShipment
-     * @summary Create Shipment
+     * @name SubmitShipment
+     * @summary Submit Shipment
      * @request POST:/shipment/
      * @secure
      */
-    createShipment: (data: ShipmentCreate, params: RequestParams = {}) =>
-      this.request<ShipmentRead, void | HTTPValidationError>({
+    submitShipment: (data: ShipmentCreate, params: RequestParams = {}) =>
+      this.request<Shipment, HTTPValidationError>({
         path: `/shipment/`,
         method: "POST",
         body: data,
@@ -573,35 +532,13 @@ export class Api<
       data: ShipmentUpdate,
       params: RequestParams = {},
     ) =>
-      this.request<ShipmentRead, HTTPValidationError>({
+      this.request<Shipment, HTTPValidationError>({
         path: `/shipment/`,
         method: "PATCH",
         query: query,
         body: data,
         secure: true,
         type: ContentType.Json,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Shipment
-     * @name GetShipmentWithTag
-     * @summary Get Shipment With Tag
-     * @request GET:/shipment/tagged
-     */
-    getShipmentWithTag: (
-      query: {
-        tag_name: TagName;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<ShipmentRead[], HTTPValidationError>({
-        path: `/shipment/tagged`,
-        method: "GET",
-        query: query,
         format: "json",
         ...params,
       }),
@@ -625,7 +562,7 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<ShipmentRead, HTTPValidationError>({
+      this.request<Shipment, HTTPValidationError>({
         path: `/shipment/tag`,
         method: "GET",
         query: query,
@@ -652,7 +589,7 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<ShipmentRead, HTTPValidationError>({
+      this.request<Shipment, HTTPValidationError>({
         path: `/shipment/tag`,
         method: "DELETE",
         query: query,
@@ -679,60 +616,11 @@ export class Api<
       },
       params: RequestParams = {},
     ) =>
-      this.request<ShipmentRead, HTTPValidationError>({
+      this.request<any, HTTPValidationError>({
         path: `/shipment/cancel`,
         method: "GET",
         query: query,
         secure: true,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Shipment
-     * @name SubmitReviewPage
-     * @summary Submit Review Page
-     * @request GET:/shipment/review
-     */
-    submitReviewPage: (
-      query: {
-        /** Token */
-        token: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<any, HTTPValidationError>({
-        path: `/shipment/review`,
-        method: "GET",
-        query: query,
-        format: "json",
-        ...params,
-      }),
-
-    /**
-     * No description
-     *
-     * @tags Shipment
-     * @name SubmitReview
-     * @summary Submit Review
-     * @request POST:/shipment/review
-     */
-    submitReview: (
-      query: {
-        /** Token */
-        token: string;
-      },
-      data: BodySubmitReview,
-      params: RequestParams = {},
-    ) =>
-      this.request<any, HTTPValidationError>({
-        path: `/shipment/review`,
-        method: "POST",
-        query: query,
-        body: data,
-        type: ContentType.UrlEncoded,
         format: "json",
         ...params,
       }),
@@ -765,7 +653,7 @@ export class Api<
      * @request POST:/seller/token
      */
     loginSeller: (data: BodyLoginSeller, params: RequestParams = {}) =>
-      this.request<any, HTTPValidationError>({
+      this.request<TokenData, HTTPValidationError>({
         path: `/seller/token`,
         method: "POST",
         body: data,
@@ -778,21 +666,34 @@ export class Api<
      * No description
      *
      * @tags Seller
-     * @name VerifySellerEmail
-     * @summary Verify Seller Email
-     * @request GET:/seller/verify
+     * @name GetSellerProfile
+     * @summary Get Seller Profile
+     * @request GET:/seller/me
+     * @secure
      */
-    verifySellerEmail: (
-      query: {
-        /** Token */
-        token: string;
-      },
-      params: RequestParams = {},
-    ) =>
-      this.request<any, HTTPValidationError>({
-        path: `/seller/verify`,
+    getSellerProfile: (params: RequestParams = {}) =>
+      this.request<SellerRead, any>({
+        path: `/seller/me`,
         method: "GET",
-        query: query,
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Seller
+     * @name GetShipments
+     * @summary Get Shipments
+     * @request GET:/seller/shipments
+     * @secure
+     */
+    getShipments: (params: RequestParams = {}) =>
+      this.request<Shipment[], any>({
+        path: `/seller/shipments`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -924,11 +825,47 @@ export class Api<
       data: BodyLoginDeliveryPartner,
       params: RequestParams = {},
     ) =>
-      this.request<any, HTTPValidationError>({
+      this.request<TokenData, HTTPValidationError>({
         path: `/partner/token`,
         method: "POST",
         body: data,
         type: ContentType.UrlEncoded,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Delivery Partner
+     * @name GetDeliveryPartnerProfile
+     * @summary Get Delivery Partner Profile
+     * @request GET:/partner/me
+     * @secure
+     */
+    getDeliveryPartnerProfile: (params: RequestParams = {}) =>
+      this.request<DeliveryPartnerRead, any>({
+        path: `/partner/me`,
+        method: "GET",
+        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Delivery Partner
+     * @name GetShipments
+     * @summary Get Shipments
+     * @request GET:/partner/shipments
+     * @secure
+     */
+    getShipments: (params: RequestParams = {}) =>
+      this.request<Shipment[], any>({
+        path: `/partner/shipments`,
+        method: "GET",
+        secure: true,
         format: "json",
         ...params,
       }),
@@ -960,12 +897,37 @@ export class Api<
      * No description
      *
      * @tags Delivery Partner
-     * @name VerifyDeliveryPartnerEmail
-     * @summary Verify Delivery Partner Email
-     * @request GET:/partner/verify
-     * @secure
+     * @name ForgotPassword
+     * @summary Forgot Password
+     * @request GET:/partner/forgot_password
      */
-    verifyDeliveryPartnerEmail: (
+    forgotPassword: (
+      query: {
+        /**
+         * Email
+         * @format email
+         */
+        email: string;
+      },
+      params: RequestParams = {},
+    ) =>
+      this.request<any, HTTPValidationError>({
+        path: `/partner/forgot_password`,
+        method: "GET",
+        query: query,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Delivery Partner
+     * @name GetResetPasswordForm
+     * @summary Get Reset Password Form
+     * @request GET:/partner/reset_password_form
+     */
+    getResetPasswordForm: (
       query: {
         /** Token */
         token: string;
@@ -973,10 +935,35 @@ export class Api<
       params: RequestParams = {},
     ) =>
       this.request<any, HTTPValidationError>({
-        path: `/partner/verify`,
+        path: `/partner/reset_password_form`,
         method: "GET",
         query: query,
-        secure: true,
+        format: "json",
+        ...params,
+      }),
+
+    /**
+     * No description
+     *
+     * @tags Delivery Partner
+     * @name ResetPassword
+     * @summary Reset Password
+     * @request POST:/partner/reset_password
+     */
+    resetPassword: (
+      query: {
+        /** Token */
+        token: string;
+      },
+      data: BodyResetPassword,
+      params: RequestParams = {},
+    ) =>
+      this.request<any, HTTPValidationError>({
+        path: `/partner/reset_password`,
+        method: "POST",
+        query: query,
+        body: data,
+        type: ContentType.UrlEncoded,
         format: "json",
         ...params,
       }),

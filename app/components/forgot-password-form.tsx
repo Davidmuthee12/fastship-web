@@ -11,33 +11,37 @@ import {
 import { Input } from "~/components/ui/input";
 import { useContext } from "react";
 import { AuthContext, type UserType } from "~/contexts/AuthContext";
-
-export function LoginForm({
+import api from "~/lib/api";
+import { toast } from "sonner";
+api;
+export function ForgotPasswordForm({
   className,
   user,
   ...props
 }: { user: UserType } & React.ComponentProps<"div">) {
   const { login } = useContext(AuthContext);
-  function loginUser(data: FormData) {
-    const email = data.get("email");
-    const password = data.get("password");
+  async function sendResetLink(data: FormData) {
+    const email = data.get("email")?.toString();
 
-    if (!email || !password) {
+    if (!email) {
       return;
     }
 
-    login(user, email.toString(), password.toString());
+    const userApi = user === "seller" ? api.seller : api.partner;
+    await userApi.forgotPassword({ email });
+
+    toast("Reset link sent to your email");
   }
   return (
     <div className={cn("flex flex-col gap-6", className)} {...props}>
       <Card className="overflow-hidden p-0">
         <CardContent className="grid p-0 md:grid-cols-2">
-          <form className="p-6 md:p-8" action={loginUser}>
+          <form className="p-6 md:p-8" action={sendResetLink}>
             <FieldGroup>
               <div className="flex flex-col items-center gap-2 text-center">
-                <h1 className="text-2xl font-bold">Welcome back</h1>
+                <h1 className="text-2xl font-bold">Reset Password</h1>
                 <p className="text-balance text-muted-foreground">
-                  Login to your FastShip account
+                  Enter Your Email Address
                 </p>
               </div>
               <Field>
@@ -51,19 +55,7 @@ export function LoginForm({
                 />
               </Field>
               <Field>
-                <div className="flex items-center">
-                  <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <a
-                    href={`/${user}/forgot-password`}
-                    className="ml-auto text-sm underline-offset-2 hover:underline"
-                  >
-                    Forgot your password?
-                  </a>
-                </div>
-                <Input id="password" type="password" name="password" required />
-              </Field>
-              <Field>
-                <Button type="submit">Login</Button>
+                <Button type="submit">Reset</Button>
               </Field>
               <FieldDescription className="text-center">
                 Don&apos;t have an account? <a href="#">Sign up</a>
