@@ -30,6 +30,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     const token = localStorage.getItem("token");
     if (token) {
       setToken(token);
+      setUser(localStorage.getItem("user" as UserType));
       api.setSecurityData(token);
     } else {
       setToken(null);

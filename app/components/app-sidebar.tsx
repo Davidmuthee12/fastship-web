@@ -1,4 +1,4 @@
-import * as React from "react"
+import * as React from "react";
 
 import {
   Sidebar,
@@ -8,11 +8,10 @@ import {
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
-  SidebarMenuSub,
-  SidebarMenuSubButton,
-  SidebarMenuSubItem,
-} from "~/components/ui/sidebar"
-import { GalleryVerticalEndIcon } from "lucide-react"
+} from "~/components/ui/sidebar";
+import { GalleryVerticalEndIcon } from "lucide-react";
+import { AuthContext } from "~/contexts/AuthContext";
+import { useContext } from "react";
 
 // This is sample data.
 const data = {
@@ -153,9 +152,23 @@ const data = {
       ],
     },
   ],
-}
+};
 
-export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+export function AppSidebar({
+  currentRoute,
+  ...props
+}: { currentRoute: string } & React.ComponentProps<typeof Sidebar>) {
+  const { user } = useContext(AuthContext);
+  const menuItems = [
+    {
+      title: "Dashboard",
+      url: "/dashboard",
+    },
+    {
+      title: "Account",
+      url: "/account",
+    },
+  ];
   return (
     <Sidebar variant="floating" {...props}>
       <SidebarHeader>
@@ -178,29 +191,45 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
       <SidebarContent>
         <SidebarGroup>
           <SidebarMenu className="gap-2">
-            {data.navMain.map((item) => (
+            {menuItems.map((item) => (
               <SidebarMenuItem key={item.title}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url} className="font-medium">
+                <SidebarMenuButton
+                  asChild
+                  isActive={currentRoute === item.title}
+                >
+                  <a href={item.url} className="">
                     {item.title}
                   </a>
                 </SidebarMenuButton>
-                {item.items?.length ? (
-                  <SidebarMenuSub className="ml-0 border-l-0 px-1.5">
-                    {item.items.map((item) => (
-                      <SidebarMenuSubItem key={item.title}>
-                        <SidebarMenuSubButton asChild isActive={item.isActive}>
-                          <a href={item.url}>{item.title}</a>
-                        </SidebarMenuSubButton>
-                      </SidebarMenuSubItem>
-                    ))}
-                  </SidebarMenuSub>
-                ) : null}
               </SidebarMenuItem>
             ))}
+            {user === "seller" && (
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={currentRoute === "Submit Shipment"}
+                >
+                  <a href="/submit-shipment" className="">
+                    Submit Shipment
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )}
+            {user === "partner" && (
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  asChild
+                  isActive={currentRoute === "Update Shipment"}
+                >
+                  <a href="/update-shipment" className="">
+                    Update Shipment
+                  </a>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            )}
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
     </Sidebar>
-  )
+  );
 }
