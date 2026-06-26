@@ -2,14 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { useContext } from "react";
 import { Navigate } from "react-router";
 import { AppSidebar } from "~/components/app-sidebar";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "~/components/ui/breadcrumb";
+import ShipmentCard from "~/components/shipment-card";
+import Loading from "~/components/ui/loading";
 import { Separator } from "~/components/ui/separator";
 import {
   SidebarInset,
@@ -24,7 +18,7 @@ import { getShipmentsCountForStatus } from "~/lib/utils";
 export default function DashboardPage() {
   const { token, user } = useContext(AuthContext);
   if (!token) {
-    return <Navigate to="/login" />;
+    return <Navigate to="/" />;
   }
 
   const { isLoading, isError, data } = useQuery({
@@ -38,8 +32,8 @@ export default function DashboardPage() {
 
   if (isError) {
     return (
-      <div>
-        <h1>Error loading Shipments</h1>
+      <div className="flex h-screen items-center justify-center">
+        <h1 className="text-2xl font-bold">Error loading shipments</h1>
       </div>
     );
   }
@@ -58,50 +52,47 @@ export default function DashboardPage() {
           <SidebarTrigger className="-ml-1" />
           <Separator
             orientation="vertical"
-            className="mr-2 data-vertical:h-4 data-vertical:self-auto"
+            className="mr-2 data-[orientation=vertical]:h-4"
           />
-          <Breadcrumb>
-            <BreadcrumbList>
-              <BreadcrumbItem className="hidden md:block">
-                <BreadcrumbLink href="#">Build Your Application</BreadcrumbLink>
-              </BreadcrumbItem>
-              <BreadcrumbSeparator className="hidden md:block" />
-              <BreadcrumbItem>
-                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-              </BreadcrumbItem>
-            </BreadcrumbList>
-          </Breadcrumb>
+          <h2>Dashboard</h2>
         </header>
-        {isLoading || !data ? (
-          <div>
-            <h1>Loading your shipments.....</h1>
-          </div>
-        ) : (
-          <>
-            <div className="grid auto-rows-min gap-4 md:grid-cols-4">
-              <NumberLabel value={data.length} label={"Total Shipment"} />
-              <NumberLabel
-                value={getShipmentsCountForStatus(data, ShipmentStatus.Placed)}
-                label={"Placed"}
-              />
-              <NumberLabel
-                value={getShipmentsCountForStatus(
-                  data,
-                  ShipmentStatus.InTransit,
-                )}
-                label={"Delivered"}
-              />
-              <NumberLabel
-                value={getShipmentsCountForStatus(
-                  data,
-                  ShipmentStatus.Delivered,
-                )}
-                label={"In Transit"}
-              />
-            </div>
-            <div className=""></div>
-          </>
-        )}
+        <div className="flex flex-1 flex-col gap-4 p-4 pt-0">
+          {isLoading || !data ? (
+            <Loading />
+          ) : (
+            <>
+              <div className="grid auto-rows-min gap-4 md:grid-cols-4">
+                <NumberLabel value={data.length} label="Total Shipments" />
+                <NumberLabel
+                  value={getShipmentsCountForStatus(
+                    data,
+                    ShipmentStatus.Placed,
+                  )}
+                  label="Placed"
+                />
+                <NumberLabel
+                  value={getShipmentsCountForStatus(
+                    data,
+                    ShipmentStatus.InTransit,
+                  )}
+                  label="In Transit"
+                />
+                <NumberLabel
+                  value={getShipmentsCountForStatus(
+                    data,
+                    ShipmentStatus.Delivered,
+                  )}
+                  label="Delivered"
+                />
+              </div>
+              <div className="grid auto-rows-min gap-4 md:grid-cols-4">
+                {data.map((shipment) => (
+                  <ShipmentCard shipment={shipment} />
+                ))}
+              </div>
+            </>
+          )}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   );
